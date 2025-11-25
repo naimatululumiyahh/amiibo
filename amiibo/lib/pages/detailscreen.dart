@@ -41,20 +41,6 @@ class _DetailScreenState extends State<DetailScreen> {
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(
-              isFav ? Icons.favorite : Icons.favorite_border,
-              color: isFav ? Colors.red : Colors.black,
-            ),
-            onPressed: () {
-              setState(() {
-                isFav = !isFav;
-              });
-              widget.onFavoriteToggle(widget.amiibo.name);
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -112,7 +98,46 @@ class _DetailScreenState extends State<DetailScreen> {
               _buildReleaseDate('🇯🇵 Japan', widget.amiibo.releasejp ?? 'N/A'),
               _buildReleaseDate('🇺🇸 North America', widget.amiibo.releasena ?? 'N/A'),
               const SizedBox(height: 20),
-            ],
+
+                // Definisikan fungsi yang akan dijalankan saat tombol diklik
+        
+
+        InkWell(
+          // Properti utama untuk membuat widget ini dapat diklik
+          onTap: _handleFavoriteToggle,
+          
+          // Properti opsional untuk memberi feedback visual (efek riak)
+          borderRadius: BorderRadius.circular(8),
+          
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            // Pindahkan Decoration ke Container untuk mempertahankan bentuk dan warna
+            decoration: BoxDecoration(
+              color: isFav ? Colors.red[100] : Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            
+            // Perbaikan: Gunakan 'child' dan 'Row' untuk menampung banyak widget
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  isFav ? Icons.favorite : Icons.favorite_border,
+                  color: isFav ? Colors.red : Colors.black54,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  isFav ? 'Added to Favorites' : 'Not in Favorites',
+                  style: TextStyle(
+                    color: isFav ? Colors.red : Colors.black54,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),],
           ),
         ),
       ),
@@ -154,6 +179,16 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
+  void _handleFavoriteToggle() {
+    setState(() {
+      isFav = !isFav;
+      
+  print('Tombol Favorit diklik! Nilai isFav saat ini: $isFav');
+      widget.onFavoriteToggle(widget.amiibo.tail);
+    });
+  }
+
+  
   Widget _buildReleaseDate(String region, String date) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
